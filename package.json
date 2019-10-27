@@ -10,8 +10,10 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@types/react-native-video": "^3.1.5",
     "react": "16.9.0",
-    "react-native": "0.61.2"
+    "react-native": "0.61.2",
+    "react-native-video": "^5.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.6.4",
