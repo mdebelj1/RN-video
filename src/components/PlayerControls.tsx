@@ -26,6 +26,7 @@ interface Props {
 export const PlayerControls: React.FC<Props> = ({
   playing,
   showPreviousAndNext,
+  showSkip,
   previousDisabled,
   nextDisabled,
   onPlay,
@@ -34,7 +35,6 @@ export const PlayerControls: React.FC<Props> = ({
   skipBackwards,
   onNext,
   onPrevious,
-  showSkip,
 }) => (
   <View style={styles.wrapper}>
     {showSkip && (
