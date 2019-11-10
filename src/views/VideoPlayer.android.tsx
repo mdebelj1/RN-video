@@ -130,7 +130,7 @@ export const VideoPlayer: React.FC = () => {
     setState(s => ({
       ...s,
       currentTime: data.currentTime,
-      durationn: data.playableDuration,
+      duration: data.playableDuration,
     }));
   }
 
