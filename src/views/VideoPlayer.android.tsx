@@ -6,14 +6,35 @@ import {
   Text,
   TouchableOpacity,
   StatusBar,
+  TouchableWithoutFeedback,
 } from 'react-native';
-import Video from 'react-native-video';
+import Video, {
+  OnSeekData,
+  OnLoadData,
+  OnProgressData,
+} from 'react-native-video';
 import {SampleVideo} from '../assets/videos';
 import Orientation from 'react-native-orientation-locker';
 import {FullscreenClose, FullscreenOpen} from '../assets/icons';
+import {PlayerControls, ProgressBar} from '../components';
+
+interface State {
+  fullscreen: boolean;
+  play: boolean;
+  currentTime: number;
+  duration: number;
+  showControls: boolean;
+}
 
 export const VideoPlayer: React.FC = () => {
-  const [fullscreen, setFullscreen] = useState<boolean>(false);
+  const videoRef = React.createRef<Video>();
+  const [state, setState] = useState<State>({
+    fullscreen: false,
+    play: false,
+    currentTime: 0,
+    duration: 0,
+    showControls: true,
+  });
 
   useEffect(() => {
     Orientation.addOrientationListener(handleOrientation);
@@ -25,19 +46,42 @@ export const VideoPlayer: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <View>
-        <Video
-          source={SampleVideo}
-          style={fullscreen ? styles.fullscreenVideo : styles.video}
-          controls={true}
-          resizeMode={'contain'}
-        />
-        <TouchableOpacity
-          onPress={handleFullscreen}
-          style={styles.fullscreenButton}>
-          {fullscreen ? <FullscreenClose /> : <FullscreenOpen />}
-        </TouchableOpacity>
-      </View>
+      <TouchableWithoutFeedback onPress={showControls}>
+        <View>
+          <Video
+            ref={videoRef}
+            source={SampleVideo}
+            style={state.fullscreen ? styles.fullscreenVideo : styles.video}
+            controls={false}
+            resizeMode={'contain'}
+            onLoad={onLoadEnd}
+            onProgress={onProgress}
+            paused={!state.play}
+          />
+          {state.showControls && (
+            <View style={styles.controlOverlay}>
+              <TouchableOpacity
+                onPress={handleFullscreen}
+                hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}
+                style={styles.fullscreenButton}>
+                {state.fullscreen ? <FullscreenClose /> : <FullscreenOpen />}
+              </TouchableOpacity>
+              <PlayerControls
+                onPlay={handlePlay}
+                onPause={handlePlay}
+                playing={state.play}
+                showPreviousAndNext={false}
+                showSkip={false}
+              />
+              <ProgressBar
+                currentTime={state.currentTime}
+                duration={state.duration > 0 ? state.duration : 0}
+                onSlide={seekTo}
+              />
+            </View>
+          )}
+        </View>
+      </TouchableWithoutFeedback>
       <Text style={styles.text}>
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus enim
         suscipit ipsa impedit laboriosam saepe, sapiente excepturi molestiae
@@ -52,14 +96,49 @@ export const VideoPlayer: React.FC = () => {
 
   function handleOrientation(orientation: string) {
     orientation === 'LANDSCAPE-LEFT' || orientation === 'LANDSCAPE-RIGHT'
-      ? (setFullscreen(true), StatusBar.setHidden(true))
-      : (setFullscreen(false), StatusBar.setHidden(false));
+      ? (setState(state => ({...state, fullscreen: true})),
+        StatusBar.setHidden(true))
+      : (setState(state => ({...state, fullscreen: false})),
+        StatusBar.setHidden(false));
   }
 
   function handleFullscreen() {
-    fullscreen
+    state.fullscreen
       ? Orientation.unlockAllOrientations()
       : Orientation.lockToLandscapeLeft();
+  }
+
+  function handlePlay() {
+    state.play
+      ? setState(state => ({...state, play: false}))
+      : setState(state => ({...state, play: true}));
+  }
+
+  function seekTo(data: OnSeekData) {
+    videoRef.current.seek(data.seekTime);
+    setState(state => ({...state, currentTime: data.seekTime}));
+  }
+
+  function onLoadEnd(data: OnLoadData) {
+    setState(state => ({
+      ...state,
+      duration: data.duration,
+      currentTime: data.currentTime,
+    }));
+  }
+
+  function onProgress(data: OnProgressData) {
+    setState(state => ({
+      ...state,
+      currentTime: data.currentTime,
+      durationn: data.playableDuration,
+    }));
+  }
+
+  function showControls() {
+    state.showControls
+      ? setState(state => ({...state, showControls: false}))
+      : setState(state => ({...state, showControls: true}));
   }
 };
 
@@ -85,10 +164,19 @@ const styles = StyleSheet.create({
     textAlign: 'justify',
   },
   fullscreenButton: {
+    flex: 1,
+    flexDirection: 'row',
+    alignSelf: 'flex-end',
+    paddingTop: 10,
+    paddingRight: 20,
+  },
+  controlOverlay: {
     position: 'absolute',
     top: 0,
+    bottom: 0,
+    left: 0,
     right: 0,
-    backgroundColor: 'red',
-    padding: 10,
+    backgroundColor: '#000000c4',
+    justifyContent: 'space-between',
   },
 });
