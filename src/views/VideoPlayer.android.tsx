@@ -7,13 +7,13 @@ import {
   TouchableOpacity,
   StatusBar,
   TouchableWithoutFeedback,
+  ScrollView,
 } from 'react-native';
 import Video, {
   OnSeekData,
   OnLoadData,
   OnProgressData,
 } from 'react-native-video';
-import {SampleVideo} from '../assets/videos';
 import Orientation from 'react-native-orientation-locker';
 import {FullscreenClose, FullscreenOpen} from '../assets/icons';
 import {PlayerControls, ProgressBar} from '../components';
@@ -50,12 +50,16 @@ export const VideoPlayer: React.FC = () => {
         <View>
           <Video
             ref={videoRef}
-            source={SampleVideo}
+            source={{
+              uri:
+                'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+            }}
             style={state.fullscreen ? styles.fullscreenVideo : styles.video}
             controls={false}
             resizeMode={'contain'}
             onLoad={onLoadEnd}
             onProgress={onProgress}
+            onEnd={onEnd}
             paused={!state.play}
           />
           {state.showControls && (
@@ -76,21 +80,23 @@ export const VideoPlayer: React.FC = () => {
               <ProgressBar
                 currentTime={state.currentTime}
                 duration={state.duration > 0 ? state.duration : 0}
-                onSlide={seekTo}
+                onSlide={onSeek}
               />
             </View>
           )}
         </View>
       </TouchableWithoutFeedback>
-      <Text style={styles.text}>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus enim
-        suscipit ipsa impedit laboriosam saepe, sapiente excepturi molestiae
-        laudantium, non tempora cumque, quam assumenda deserunt? Similique eaque
-        voluptas itaque corporis. Lorem ipsum dolor sit amet consectetur
-        adipisicing elit. Sequi unde iusto vel facere quibusdam nisi placeat,
-        debitis veritatis autem deserunt at voluptas nam ut mollitia qui fugit
-        minus minima quod.
-      </Text>
+      <ScrollView>
+        <Text style={styles.text}>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus enim
+          suscipit ipsa impedit laboriosam saepe, sapiente excepturi molestiae
+          laudantium, non tempora cumque, quam assumenda deserunt? Similique
+          eaque voluptas itaque corporis. Lorem ipsum dolor sit amet consectetur
+          adipisicing elit. Sequi unde iusto vel facere quibusdam nisi placeat,
+          debitis veritatis autem deserunt at voluptas nam ut mollitia qui fugit
+          minus minima quod.
+        </Text>
+      </ScrollView>
     </View>
   );
 
@@ -109,11 +115,11 @@ export const VideoPlayer: React.FC = () => {
 
   function handlePlay() {
     state.play
-      ? setState({...state, play: false})
-      : setState({...state, play: true});
+      ? setState({...state, play: false, showControls: true})
+      : setState({...state, play: true, showControls: false});
   }
 
-  function seekTo(data: OnSeekData) {
+  function onSeek(data: OnSeekData) {
     videoRef.current.seek(data.seekTime);
     setState({...state, currentTime: data.seekTime});
   }
@@ -130,8 +136,12 @@ export const VideoPlayer: React.FC = () => {
     setState(s => ({
       ...s,
       currentTime: data.currentTime,
-      duration: data.playableDuration,
     }));
+  }
+
+  function onEnd() {
+    setState({...state, play: false});
+    videoRef.current.seek(0);
   }
 
   function showControls() {
@@ -153,7 +163,7 @@ const styles = StyleSheet.create({
   },
   fullscreenVideo: {
     height: Dimensions.get('window').width,
-    width: Dimensions.get('window').height,
+    width: '100%',
     backgroundColor: 'black',
   },
   text: {

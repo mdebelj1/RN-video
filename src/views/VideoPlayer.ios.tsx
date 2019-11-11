@@ -1,26 +1,30 @@
 import React from 'react';
-import {StyleSheet, Dimensions, View, Text} from 'react-native';
+import {StyleSheet, Dimensions, View, Text, ScrollView} from 'react-native';
 import Video from 'react-native-video';
-import {SampleVideo} from '../assets/videos';
 
 export const VideoPlayer: React.FC = () => {
   return (
     <View style={styles.container}>
       <Video
-        source={SampleVideo}
+        source={{
+          uri:
+            'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+        }}
         style={styles.video}
         controls={true}
         resizeMode={'cover'}
       />
-      <Text style={styles.text}>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus enim
-        suscipit ipsa impedit laboriosam saepe, sapiente excepturi molestiae
-        laudantium, non tempora cumque, quam assumenda deserunt? Similique eaque
-        voluptas itaque corporis. Lorem ipsum dolor sit amet consectetur
-        adipisicing elit. Sequi unde iusto vel facere quibusdam nisi placeat,
-        debitis veritatis autem deserunt at voluptas nam ut mollitia qui fugit
-        minus minima quod.
-      </Text>
+      <ScrollView>
+        <Text style={styles.text}>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus enim
+          suscipit ipsa impedit laboriosam saepe, sapiente excepturi molestiae
+          laudantium, non tempora cumque, quam assumenda deserunt? Similique
+          eaque voluptas itaque corporis. Lorem ipsum dolor sit amet consectetur
+          adipisicing elit. Sequi unde iusto vel facere quibusdam nisi placeat,
+          debitis veritatis autem deserunt at voluptas nam ut mollitia qui fugit
+          minus minima quod.
+        </Text>
+      </ScrollView>
     </View>
   );
 };
