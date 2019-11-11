@@ -1,5 +1,5 @@
 import React from 'react';
-import Slider from 'react-native-slider';
+import Slider from '@react-native-community/slider';
 import {View, Text, StyleSheet} from 'react-native';
 
 interface Props {
@@ -26,9 +26,7 @@ export const ProgressBar: React.FC<Props> = ({
         onSlidingComplete={handleOnSlide}
         minimumTrackTintColor={'#F44336'}
         maximumTrackTintColor={'#FFFFFF'}
-        thumbStyle={styles.thumb}
-        thumbTouchStyle={styles.thumbTouchArea}
-        trackStyle={styles.track}
+        thumbTintColor={'#F44336'}
         style={styles.wrapper}
       />
       <View style={styles.timeWrapper}>
@@ -56,20 +54,6 @@ const styles = StyleSheet.create({
   wrapper: {
     height: 40,
     width: '100%',
-  },
-  track: {
-    height: 5,
-    width: '100%',
-  },
-  thumb: {
-    height: 15,
-    width: 15,
-    borderRadius: 10,
-    backgroundColor: '#F44336',
-  },
-  thumbTouchArea: {
-    height: 40,
-    width: 40,
   },
   timeWrapper: {
     display: 'flex',

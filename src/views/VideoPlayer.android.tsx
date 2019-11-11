@@ -96,9 +96,8 @@ export const VideoPlayer: React.FC = () => {
 
   function handleOrientation(orientation: string) {
     orientation === 'LANDSCAPE-LEFT' || orientation === 'LANDSCAPE-RIGHT'
-      ? (setState(state => ({...state, fullscreen: true})),
-        StatusBar.setHidden(true))
-      : (setState(state => ({...state, fullscreen: false})),
+      ? (setState(s => ({...s, fullscreen: true})), StatusBar.setHidden(true))
+      : (setState(s => ({...s, fullscreen: false})),
         StatusBar.setHidden(false));
   }
 
@@ -110,35 +109,35 @@ export const VideoPlayer: React.FC = () => {
 
   function handlePlay() {
     state.play
-      ? setState(state => ({...state, play: false}))
-      : setState(state => ({...state, play: true}));
+      ? setState({...state, play: false})
+      : setState({...state, play: true});
   }
 
   function seekTo(data: OnSeekData) {
     videoRef.current.seek(data.seekTime);
-    setState(state => ({...state, currentTime: data.seekTime}));
+    setState({...state, currentTime: data.seekTime});
   }
 
   function onLoadEnd(data: OnLoadData) {
-    setState(state => ({
-      ...state,
+    setState(s => ({
+      ...s,
       duration: data.duration,
       currentTime: data.currentTime,
     }));
   }
 
   function onProgress(data: OnProgressData) {
-    setState(state => ({
-      ...state,
+    setState(s => ({
+      ...s,
       currentTime: data.currentTime,
-      durationn: data.playableDuration,
+      duration: data.playableDuration,
     }));
   }
 
   function showControls() {
     state.showControls
-      ? setState(state => ({...state, showControls: false}))
-      : setState(state => ({...state, showControls: true}));
+      ? setState({...state, showControls: false})
+      : setState({...state, showControls: true});
   }
 };
 
