@@ -66,7 +66,7 @@ export const VideoPlayer: React.FC = () => {
             <View style={styles.controlOverlay}>
               <TouchableOpacity
                 onPress={handleFullscreen}
-                hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}
+                hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}
                 style={styles.fullscreenButton}>
                 {state.fullscreen ? <FullscreenClose /> : <FullscreenOpen />}
               </TouchableOpacity>
@@ -176,8 +176,8 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignSelf: 'flex-end',
-    paddingTop: 10,
-    paddingRight: 20,
+    alignItems: 'center',
+    paddingRight: 10,
   },
   controlOverlay: {
     position: 'absolute',

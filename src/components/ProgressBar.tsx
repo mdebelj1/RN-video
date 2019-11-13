@@ -17,7 +17,7 @@ export const ProgressBar: React.FC<Props> = ({
   const fullDuration = getMinutesFromSeconds(duration);
 
   return (
-    <React.Fragment>
+    <View style={styles.wrapper}>
       <Slider
         value={currentTime}
         minimumValue={0}
@@ -27,13 +27,12 @@ export const ProgressBar: React.FC<Props> = ({
         minimumTrackTintColor={'#F44336'}
         maximumTrackTintColor={'#FFFFFF'}
         thumbTintColor={'#F44336'}
-        style={styles.wrapper}
       />
       <View style={styles.timeWrapper}>
         <Text style={styles.timeLeft}>{position}</Text>
         <Text style={styles.timeRight}>{fullDuration}</Text>
       </View>
-    </React.Fragment>
+    </View>
   );
 
   function getMinutesFromSeconds(time: number) {
@@ -52,18 +51,13 @@ export const ProgressBar: React.FC<Props> = ({
 
 const styles = StyleSheet.create({
   wrapper: {
-    height: 40,
-    width: '100%',
+    flex: 1,
   },
   timeWrapper: {
-    display: 'flex',
     flexDirection: 'row',
-    height: 30,
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 5,
-    width: '100%',
-    zIndex: 2001,
   },
   timeLeft: {
     flex: 1,

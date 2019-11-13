@@ -37,12 +37,6 @@ export const PlayerControls: React.FC<Props> = ({
   onPrevious,
 }) => (
   <View style={styles.wrapper}>
-    {showSkip && (
-      <TouchableOpacity style={styles.touchable} onPress={skipBackwards}>
-        <VideoSkipBack />
-      </TouchableOpacity>
-    )}
-
     {showPreviousAndNext && (
       <TouchableOpacity
         style={[styles.touchable, previousDisabled && styles.touchableDisabled]}
@@ -52,11 +46,23 @@ export const PlayerControls: React.FC<Props> = ({
       </TouchableOpacity>
     )}
 
+    {showSkip && (
+      <TouchableOpacity style={styles.touchable} onPress={skipBackwards}>
+        <VideoSkipBack />
+      </TouchableOpacity>
+    )}
+
     <TouchableOpacity
       style={styles.touchable}
       onPress={playing ? onPause : onPlay}>
       {playing ? <VideoPause /> : <VideoPlay />}
     </TouchableOpacity>
+
+    {showSkip && (
+      <TouchableOpacity style={styles.touchable} onPress={skipForwards}>
+        <VideoSkipForward />
+      </TouchableOpacity>
+    )}
 
     {showPreviousAndNext && (
       <TouchableOpacity
@@ -66,25 +72,16 @@ export const PlayerControls: React.FC<Props> = ({
         <VideoNext />
       </TouchableOpacity>
     )}
-
-    {showSkip && (
-      <TouchableOpacity style={styles.touchable} onPress={skipForwards}>
-        <VideoSkipForward />
-      </TouchableOpacity>
-    )}
   </View>
 );
 
 const styles = StyleSheet.create({
   wrapper: {
-    width: '100%',
     paddingHorizontal: 5,
-    marginTop: 20,
-    display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-evenly',
-    flex: 6,
+    flex: 3,
   },
   touchable: {
     padding: 5,
