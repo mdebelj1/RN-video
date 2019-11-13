@@ -75,7 +75,9 @@ export const VideoPlayer: React.FC = () => {
                 onPause={handlePlay}
                 playing={state.play}
                 showPreviousAndNext={false}
-                showSkip={false}
+                showSkip={true}
+                skipBackwards={skipBackward}
+                skipForwards={skipForward}
               />
               <ProgressBar
                 currentTime={state.currentTime}
@@ -117,6 +119,16 @@ export const VideoPlayer: React.FC = () => {
     state.play
       ? setState({...state, play: false, showControls: true})
       : setState({...state, play: true, showControls: false});
+  }
+
+  function skipBackward() {
+    videoRef.current.seek(state.currentTime - 15);
+    setState({...state, currentTime: state.currentTime - 15});
+  }
+
+  function skipForward() {
+    videoRef.current.seek(state.currentTime + 15);
+    setState({...state, currentTime: state.currentTime + 15});
   }
 
   function onSeek(data: OnSeekData) {
