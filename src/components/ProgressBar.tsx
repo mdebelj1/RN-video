@@ -5,13 +5,17 @@ import {View, Text, StyleSheet} from 'react-native';
 interface Props {
   currentTime: number;
   duration: number;
-  onSlide: (data: {seekTime: number}) => void;
+  onSlideCapture: (data: {seekTime: number}) => void;
+  onSlideStart: () => void;
+  onSlideComplete: () => void;
 }
 
 export const ProgressBar: React.FC<Props> = ({
   currentTime,
   duration,
-  onSlide,
+  onSlideCapture,
+  onSlideStart,
+  onSlideComplete,
 }) => {
   const position = getMinutesFromSeconds(currentTime);
   const fullDuration = getMinutesFromSeconds(duration);
@@ -24,6 +28,8 @@ export const ProgressBar: React.FC<Props> = ({
         maximumValue={duration}
         step={1}
         onValueChange={handleOnSlide}
+        onSlidingStart={onSlideStart}
+        onSlidingComplete={onSlideComplete}
         minimumTrackTintColor={'#F44336'}
         maximumTrackTintColor={'#FFFFFF'}
         thumbTintColor={'#F44336'}
@@ -45,7 +51,7 @@ export const ProgressBar: React.FC<Props> = ({
   }
 
   function handleOnSlide(time: number) {
-    onSlide({seekTime: time});
+    onSlideCapture({seekTime: time});
   }
 };
 

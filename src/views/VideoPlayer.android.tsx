@@ -71,8 +71,8 @@ export const VideoPlayer: React.FC = () => {
                 {state.fullscreen ? <FullscreenClose /> : <FullscreenOpen />}
               </TouchableOpacity>
               <PlayerControls
-                onPlay={handlePlay}
-                onPause={handlePlay}
+                onPlay={handlePlayPause}
+                onPause={handlePlayPause}
                 playing={state.play}
                 showPreviousAndNext={false}
                 showSkip={true}
@@ -82,7 +82,9 @@ export const VideoPlayer: React.FC = () => {
               <ProgressBar
                 currentTime={state.currentTime}
                 duration={state.duration > 0 ? state.duration : 0}
-                onSlide={onSeek}
+                onSlideStart={handlePlayPause}
+                onSlideComplete={handlePlayPause}
+                onSlideCapture={onSeek}
               />
             </View>
           )}
@@ -115,7 +117,7 @@ export const VideoPlayer: React.FC = () => {
       : Orientation.lockToLandscapeLeft();
   }
 
-  function handlePlay() {
+  function handlePlayPause() {
     state.play
       ? setState({...state, play: false, showControls: true})
       : setState({...state, play: true, showControls: false});
@@ -175,7 +177,7 @@ const styles = StyleSheet.create({
   },
   fullscreenVideo: {
     height: Dimensions.get('window').width,
-    width: '100%',
+    width: Dimensions.get('window').height,
     backgroundColor: 'black',
   },
   text: {

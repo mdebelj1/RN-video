@@ -10,7 +10,7 @@ import {
 } from '../assets/icons';
 
 interface Props {
-  playing: boolean | undefined;
+  playing: boolean;
   showPreviousAndNext: boolean;
   showSkip: boolean;
   previousDisabled?: boolean;
