@@ -118,9 +118,14 @@ export const VideoPlayer: React.FC = () => {
   }
 
   function handlePlayPause() {
-    state.play
-      ? setState({...state, play: false, showControls: true})
-      : setState({...state, play: true, showControls: false});
+    // If playing, pause and show controls immediately.
+    if (state.play) {
+      setState({...state, play: false, showControls: true});
+      return;
+    }
+
+    setState({...state, play: true});
+    setTimeout(() => setState(s => ({...s, showControls: false})), 2000);
   }
 
   function skipBackward() {
